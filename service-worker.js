@@ -5,7 +5,14 @@ const ASSETS_TO_CACHE = [
   "./index.html",
   "./style.css",
   "./script.js",
-  "./logo.png"
+  "./logo.png",
+  "./converter.html",
+  "./converter.js",
+  "./donate.js",
+  "./numX.png",
+  "./operations.html",
+  "./operations.js",
+  "./assets/karsh.png"
 ];
 
 /* Install */
