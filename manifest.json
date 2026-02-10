@@ -1,18 +1,26 @@
 {
   "name": "NumX",
   "short_name": "NumX",
-  "start_url": "/numX/index.html",
-  "scope": "/numX/",
+  "description": "NumX – Binary arithmetic and number system tools",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#4f46e5",
+  "display_override": ["standalone", "minimal-ui"],
+  "background_color": "#050816",
+  "theme_color": "#5f6bff",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/numX/logo.png",
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/logo.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
-
