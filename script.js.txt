@@ -1,0 +1,332 @@
+/* ==========================
+   GLOBAL CONSTANTS
+========================== */
+const DIGITS = "0123456789ABCDEF";
+
+/* ==========================
+   DOM REFERENCES
+========================== */
+const resultSection = document.getElementById("resultSection");
+const resultBox = document.getElementById("resultBox");
+const themeToggle = document.getElementById("themeToggle");
+const copyBtn = document.getElementById("copyBtn");
+const swapBtn = document.getElementById("swapBtn");
+const toBase = document.getElementById("toBase");
+
+/* ==========================
+   DEFAULT DARK MODE
+========================== */
+document.body.classList.add("dark");
+themeToggle.checked = true;
+
+/* ==========================
+   THEME TOGGLE
+========================== */
+themeToggle.addEventListener("change", () => {
+  document.body.classList.toggle("dark");
+});
+
+/* ==========================
+   TOAST
+========================== */
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2000);
+}
+
+/* ==========================
+   SWAP BASES
+========================== */
+toBase.addEventListener("change", () => {
+  swapBtn.disabled = toBase.value === "all";
+});
+
+function swapBases() {
+  if (toBase.value === "all") return;
+  const f = fromBase.value;
+  fromBase.value = toBase.value;
+  toBase.value = f;
+}
+
+/* ==========================
+   VALIDATION
+========================== */
+function isValid(num, base) {
+  const patterns = {
+    2: /^[01]+(\.[01]+)?$/,
+    8: /^[0-7]+(\.[0-7]+)?$/,
+    10: /^[0-9]+(\.[0-9]+)?$/,
+    16: /^[0-9a-fA-F]+(\.[0-9a-fA-F]+)?$/
+  };
+  return patterns[base].test(num);
+}
+
+/* ==========================
+   PARSING
+========================== */
+function parseNumber(input) {
+  const [integer, fraction = ""] = input.toUpperCase().split(".");
+  return { integer, fraction };
+}
+
+/* ==========================
+   BASE → DECIMAL
+========================== */
+function toDecimal(input, base) {
+  const { integer, fraction } = parseNumber(input);
+  let value = 0;
+
+  for (let i = 0; i < integer.length; i++) {
+    value += DIGITS.indexOf(integer[i]) * Math.pow(base, integer.length - 1 - i);
+  }
+
+  for (let i = 0; i < fraction.length; i++) {
+    value += DIGITS.indexOf(fraction[i]) * Math.pow(base, -(i + 1));
+  }
+
+  return value;
+}
+
+/* ==========================
+   DECIMAL → BASE
+========================== */
+function fromDecimal(decimal, base, precision = 7) {
+  let intPart = Math.floor(decimal);
+  let fracPart = decimal - intPart;
+
+  let intRes = intPart === 0 ? "0" : "";
+  while (intPart > 0) {
+    intRes = DIGITS[intPart % base] + intRes;
+    intPart = Math.floor(intPart / base);
+  }
+
+  let fracRes = "";
+  let count = 0;
+  while (fracPart > 0 && count < precision) {
+    fracPart *= base;
+    const d = Math.floor(fracPart);
+    fracRes += DIGITS[d];
+    fracPart -= d;
+    count++;
+  }
+
+  return fracRes ? `${intRes}.${fracRes}` : intRes;
+}
+
+/* ==========================
+   FORMAT
+========================== */
+function formatResult(val, base) {
+  return `( ${val} )<sub>${base}</sub>`;
+}
+
+/* ==========================
+   SEE HOW RESET
+========================== */
+function closeSeeHow() {
+  const box = document.getElementById("howBox");
+  const btn = document.getElementById("seeHowBtn");
+  if (!box) return;
+  box.classList.add("closing");
+  setTimeout(() => {
+    box.style.display = "none";
+    box.classList.remove("closing");
+    btn.classList.remove("open");
+  }, 250);
+}
+
+/* ==========================
+   CONVERT
+========================== */
+function convert() {
+  closeSeeHow();
+
+  const num = numberInput.value.trim();
+  const fBase = parseInt(fromBase.value);
+  const tBase = toBase.value;
+
+  if (!num || !isValid(num, fBase)) {
+    showToast("Invalid number for selected base");
+    return;
+  }
+
+  const dec = toDecimal(num, fBase);
+  let out = "";
+
+  if (tBase === "all") {
+    out += `Binary: ${formatResult(fromDecimal(dec, 2), 2)}<br>`;
+    out += `Decimal: ${formatResult(dec.toString(), 10)}<br>`;
+    out += `Octal: ${formatResult(fromDecimal(dec, 8), 8)}<br>`;
+    out += `Hexadecimal: ${formatResult(fromDecimal(dec, 16), 16)}`;
+  } else {
+out = formatResult(fromDecimal(dec, parseInt(tBase)), tBase);
+  }
+
+  resultBox.innerHTML = out;
+  resultSection.style.display = "block";
+  resultSection.scrollIntoView({ behavior: "smooth" });
+}
+
+/* ==========================
+   COPY
+========================== */
+function copyResult() {
+  const txt = resultBox.innerText.trim();
+  if (!txt) return;
+  navigator.clipboard.writeText(txt);
+  showToast("Result copied!");
+}
+
+/* ==========================
+   SEE HOW v2 (BUILD 1)
+========================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("seeHowBtn");
+  const box = document.getElementById("howBox");
+
+  function stepHeader(n, text) {
+    return `<div class="step-header">Step: ${n}<br><span>${text}</span></div>`;
+  }
+
+  function explainBaseToDecimal(input, base) {
+    const { integer, fraction } = parseNumber(input);
+    let sumParts = [];
+    let html = stepHeader(1, `First we convert (${input})<sub>${base}</sub> to decimal`);
+
+    integer.split("").forEach((d, i) => {
+      const pow = integer.length - 1 - i;
+      const val = DIGITS.indexOf(d) * Math.pow(base, pow);
+      sumParts.push(val);
+      html += `<div class="step-row">${d} × ${base}<sup>${pow}</sup> = <b>${val}</b></div>`;
+    });
+
+    if (fraction) {
+      fraction.split("").forEach((d, i) => {
+        const val = DIGITS.indexOf(d) * Math.pow(base, -(i + 1));
+        sumParts.push(val);
+        html += `<div class="step-row">${d} × ${base}<sup>-${i + 1}</sup> = <b>${val}</b></div>`;
+      });
+    }
+
+    html += `<div class="math-line">${sumParts.join(" + ")} = <b>${sumParts.reduce((a,b)=>a+b,0)}</b></div>`;
+    return html;
+  }
+
+function explainDecimalToBase(decimal, base, stepNo) {
+  let html = stepHeader(stepNo, `Now we convert the decimal result to base ${base}`);
+
+  /* -------- Integer Part -------- */
+  let intPart = Math.floor(decimal);
+  let fracPart = decimal - intPart;
+  let remainders = [];
+
+  html += `<div class="sub-head">Integer part:</div>`;
+
+  if (intPart === 0) {
+    html += `<div class="step-row">0</div>`;
+    remainders.push("0");
+  } else {
+    while (intPart > 0) {
+      const q = Math.floor(intPart / base);
+      const r = intPart % base;
+      html += `
+        <div class="step-row">
+          ${intPart} ÷ ${base} = ${q} remainder <b>${r}</b>
+        </div>
+      `;
+      remainders.unshift(r);
+      intPart = q;
+    }
+  }
+
+  html += `
+    <div class="math-line">
+      Digits (from bottom to top) → <b>${remainders.join("")}</b>
+    </div>
+  `;
+
+  /* -------- Fractional Part -------- */
+  if (fracPart > 0) {
+    html += `<div class="sub-head">Fractional part:</div>`;
+
+    let fracDigits = "";
+    let count = 0;
+
+    while (fracPart > 0 && count < 7) {
+      const prev = fracPart;
+      fracPart *= base;
+      const digit = Math.floor(fracPart);
+      html += `
+        <div class="step-row">
+          ${prev.toFixed(6)} × ${base} = ${fracPart.toFixed(6)} → <b>${digit}</b>
+        </div>
+      `;
+      fracDigits += digit;
+      fracPart -= digit;
+      count++;
+    }
+
+    html += `
+      <div class="math-line">
+        Digits (from top to bottom) → <b>.${fracDigits}</b>
+      </div>
+    `;
+  }
+
+  return html;
+}
+
+
+
+  btn.addEventListener("click", () => {
+    const num = numberInput.value.trim();
+    const fBase = parseInt(fromBase.value);
+    const tBase = parseInt(toBase.value);
+    if (!num) return;
+
+    const dec = toDecimal(num, fBase);
+    let html = "";
+
+    if (fBase !== 10) html += explainBaseToDecimal(num, fBase);
+    if (tBase !== 10) html += explainDecimalToBase(dec, tBase, fBase !== 10 ? 2 : 1);
+
+    html += `
+      <div class="final-result">
+        Final Result:
+        <span class="final-value">( ${fromDecimal(dec, tBase)} )<sub>${tBase}</sub></span>
+      </div>
+    `;
+
+    box.innerHTML = html;
+    box.style.display = "block";
+    btn.classList.add("open");
+  });
+});
+
+
+//scientific helper
+// function toScientific(value, base) {
+//   const str = value.replace(".", "");
+//   const dotIndex = value.indexOf(".");
+//   const exponent =
+//     dotIndex === -1
+//       ? value.length - 1
+//       : dotIndex - 1;
+
+//   const mantissa =
+//     value[0] +
+//     (value.length > 1 ? "." + str.slice(1, 6) : "");
+
+//   return `${mantissa} × ${base}<sup>${exponent}</sup>`;
+// }
+
+// if (raw.includes("....")) {
+//   resultBox.insertAdjacentHTML(
+//     "beforeend",
+//     `<div class="precision-note">
+//       Repeating fraction — truncated after 7 digits
+//     </div>`
+//   );
+// }

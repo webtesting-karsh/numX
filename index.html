@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NumX</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Allura&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Fredericka+the+Great&family=Great+Vibes&family=Instrument+Serif:ital@0;1&family=Licorice&family=Nanum+Myeongjo&family=Nosifer&family=Playwrite+DE+Grund+Guides&display=swap" rel="stylesheet">
+</head>
+<body>
+  
+  <div class="container home-container">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <img src="./logo.png" alt="NumX Logo">
+      </div>
+
+      <div class="app-name">NumX</div>
+      <div class="subtitle">Service served by <span class="karsh">karsh Securities</span></div>
+    </div>
+
+    <!-- Main Actions -->
+    <div class="home-actions">
+
+      <a href="operations.html" class="home-card">
+        <div class="home-card-icon">＋ − × ÷</div>
+        <div class="home-card-title">Arithmetic Operations <br> (only Binary) </div>
+      </a>
+
+      <a href="converter.html" class="home-card">
+        <div class="home-card-icon">2 ↔ 10 ↔ 16</div>
+        <div class="home-card-title">Base Converter</div>
+      </a>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-row">
+        <a
+          class="insta-pill"
+          href="https://www.instagram.com/heyy_riishu/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg class="insta-logo" viewBox="0 0 24 24">
+            <path d="M7.75 2h8.5C19.44 2 22 4.56 22 7.75v8.5C22 19.44 19.44 22 16.25 22h-8.5C4.56 22 2 19.44 2 16.25v-8.5C2 4.56 4.56 2 7.75 2Z"/>
+          </svg>
+          <span class="insta-name">heyy_riishu</span>
+        </a>
+      </div>
+    </footer>
+
+  </div>
+  <div class="donate-overlay" id="donateOverlay">
+  <div class="donate-popup">
+    
+
+    <img src="./assets/karsh.png" alt="Support illustration" class="donate-image"/>
+
+    <h2>Support NumX 💙</h2>
+
+    <p>
+      Your contribution helps us keep this app running,
+      improving features, and staying ad-free.
+      This service is served by 'karsh Securities'
+    </p>
+
+    <button class="donate-btn" id="donateBtn">
+      Donate Us
+    </button>
+    <button class="remind-btn" id="donateClose">Remind me later</button>
+  </div>
+</div>
+<script src="donate.js"></script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NumX</title>
+<link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <div class="logo">
+        <img src="logo.png" alt="">
+      </div>
+
+      <div class="theme-switch">
+        <span class="sun">☀️</span>
+        <label class="switch">
+          <input type="checkbox" id="themeToggle">
+          <span class="slider"></span>
+        </label>
+        <span class="moon">🌕</span>
+      </div>
+<!--scientific toggle-->
+<!-- <div class="sci-toggle">
+  <label>
+    <input type="checkbox" id="sciToggle">
+    <span>Scientific</span>
+  </label>
+</div> -->
+<!---->
+      <div class="feature-name">Base Converter</div>
+    </div>
+
+    <!-- FROM / TO / SWAP -->
+    <div class="row from-to-row">
+
+      <div class="field" id="fromField">
+        <label>From</label>
+        <select id="fromBase">
+          <option value="2">Binary</option>
+          <option value="10">Decimal</option>
+          <option value="8">Octal</option>
+          <option value="16">Hexadecimal</option>
+        </select>
+      </div>
+
+      <!-- Swap Button -->
+      <div class="swap-wrapper">
+        <button class="swap-center-btn" id="swapBtn" onclick="swapBases()">
+          🔄
+        </button>
+        <span class="tooltip">Swap bases</span>
+      </div>
+
+      <div class="field" id="toField">
+        <label>To</label>
+        <select id="toBase">
+          <option value="2">Binary</option>
+          <option value="10">Decimal</option>
+          <option value="8">Octal</option>
+          <option value="16">Hexadecimal</option>
+          <option value="all">Convert to All</option>
+        </select>
+      </div>
+
+    </div>
+
+    <!-- INPUT -->
+    <div class="card">
+      <label>Enter Number</label>
+      <input type="text" id="numberInput" placeholder="Enter number here">
+    </div>
+
+    <button class="primary-btn" onclick="convert()">Calculate</button>
+
+    <!-- RESULT -->
+    <div class="result-card" id="resultSection">
+      <div class="result-header">
+        <span class="result-title">Result</span>
+
+        <button class="copy-btn" id="copyBtn" onclick="copyResult()">
+          <span class="copy-text">Copy</span>
+          <span class="copy-check">✓</span>
+        </button>
+      </div>
+
+      <div class="result-box" id="resultBox"></div>
+      <div class="see-how-wrapper">
+  <button class="see-how-btn" id="seeHowBtn">
+    See How <span class="arrow">▾</span>
+  </button>
+   <!---->
+<div class="how-box" id="howBox"></div>
+<!---->
+
+<!---->
+  <!-- <div class="how-box" id="howBox"></div>
+</div> -->
+
+    </div>
+
+   
+</div>
+  <!-- FOOTER -->
+    <footer class="footer">
+
+  <div class="footer-row">
+    <!-- <span class="left">Coded by Rishu</span>
+    <span class="separator">|</span> -->
+
+    <a
+      class="insta-pill"
+      href="https://www.instagram.com/heyy_riishu/"
+  target="_blank"
+  rel="noopener noreferrer external"
+    >
+      <svg class="insta-logo" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7.75 2h8.5C19.44 2 22 4.56 22 7.75v8.5C22 19.44 19.44 22 16.25 22h-8.5C4.56 22 2 19.44 2 16.25v-8.5C2 4.56 4.56 2 7.75 2Zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5Zm4.25 3.5a5 5 0 1 1 0 10a5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7Zm5.25-.88a1.13 1.13 0 1 1 0 2.26a1.13 1.13 0 0 1 0-2.26Z"/>
+      </svg>
+
+      <span class="insta-name">heyy_riishu</span>
+    </a>
+  </div>
+
+  <!-- <div class="footer-row">
+    <span class="left">UI / UX by Rishu</span>
+    <span class="separator">|</span>
+
+    <a
+      class="insta-pill"
+      href="https://www.instagram.com/heyy_riishu/"
+      target="_blank"
+    >
+      <svg class="insta-logo" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M7.75 2h8.5C19.44 2 22 4.56 22 7.75v8.5C22 19.44 19.44 22 16.25 22h-8.5C4.56 22 2 19.44 2 16.25v-8.5C2 4.56 4.56 2 7.75 2Zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5Zm4.25 3.5a5 5 0 1 1 0 10a5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7Zm5.25-.88a1.13 1.13 0 1 1 0 2.26a1.13 1.13 0 0 1 0-2.26Z"/>
+      </svg>
+
+      <span class="insta-name">heyy_riishu</span>
+    </a>
+  </div> -->
+
+</footer>
+   <!--donate us pop-up-->
+   <!-- Donate Popup -->
+<div class="donate-overlay" id="donateOverlay">
+  <div class="donate-popup">
+    
+
+    <img src="./assets/karsh.png" alt="Support illustration" class="donate-image"/>
+
+    <h2>Support NumX 💙</h2>
+
+    <p>
+      Your contribution helps us keep this app running,
+      improving features, and staying ad-free.
+      This service is served by 'karsh Securities'
+    </p>
+
+    <button class="donate-btn" id="donateBtn">
+      Donate Us
+    </button>
+    <button class="remind-btn" id="donateClose">Remind me later</button>
+  </div>
+</div>
+
+  <script src="converter.js"></script>
+  <script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./service-worker.js");
+  }
+</script>
+<script src="donate.js"></script>
+</body>
+</html>

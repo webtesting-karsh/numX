@@ -1,0 +1,5 @@
+copyrighted by: karsh.in
+coded by: karsh (harsh and komal)
+
+features:  export as text 
+           export as image.

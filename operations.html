@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NumX • Arithmetic Operations</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="dark">
+
+  <div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+      <button class="back-btn" onclick="goHome()">←</button>
+
+      <div class="logo">
+        <img src="logo.png" alt="NumX logo">
+      </div>
+
+      <div class="feature-name">Arithmetic Operations</div>
+    </div>
+
+    <!-- INPUT 1 -->
+    <div class="card">
+      <label>Number 1</label>
+      <input type="text" id="num1" placeholder="Enter first number">
+    </div>
+
+    <!-- OPERATOR -->
+   <div class="card">
+  <label>Select Operator</label>
+
+  <div class="operator-row" id="operatorRow">
+    <button class="op-btn active" data-op="+">+</button>
+    <button class="op-btn" data-op="-">−</button>
+    <button class="op-btn" data-op="*">×</button>
+    <button class="op-btn" data-op="/">÷</button>
+  </div>
+</div>
+
+    <!-- <div class="op-hint">
+  + &nbsp; − &nbsp; × &nbsp; ÷
+</div> -->
+
+
+    <!-- INPUT 2 -->
+    <div class="card">
+      <label>Number 2</label>
+      <input type="text" id="num2" placeholder="Enter second number">
+    </div>
+
+    <!-- ACTION -->
+    <button class="primary-btn" onclick="calculateOperation()">
+      Calculate
+    </button>
+
+    <!-- RESULT (same structure as converter) -->
+    <div class="result-card" id="resultSection">
+      <div class="result-header">
+        <span class="result-title">Result</span>
+      </div>
+
+      <div class="result-box" id="resultBox"></div>
+
+      <button class="see-how-btn" id="seeHowBtn">
+        See How <span class="arrow">▾</span>
+      </button>
+
+      <div class="how-box" id="howBox"></div>
+    </div>
+
+  </div>
+  <!--donation popup-->
+ <div class="donate-overlay" id="donateOverlay">
+  <div class="donate-popup">
+    
+
+    <img src="./assets/karsh.png" alt="Support illustration" class="donate-image"/>
+
+    <h2>Support NumX 💙</h2>
+
+    <p>
+      Your contribution helps us keep this app running,
+      improving features, and staying ad-free.
+      This service is served by 'karsh Securities'
+    </p>
+
+    <button class="donate-btn" id="donateBtn">
+      Donate Us
+    </button>
+    <button class="remind-btn" id="donateClose">Remind me later</button>
+  </div>
+</div>
+
+  <script src="operations.js"></script>
+  <script src="donate.js"></script>
+</body>
+</html>
