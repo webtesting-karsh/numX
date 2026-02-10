@@ -1,17 +1,18 @@
 {
   "name": "NumX",
   "short_name": "NumX",
-  "start_url": "/Number-System-Converter/index.html",
-  "scope": "/Number-System-Converter/",
+  "start_url": "/numX/index.html",
+  "scope": "/numX/",
   "display": "standalone",
   "background_color": "#0f172a",
   "theme_color": "#4f46e5",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/Number-System-Converter/logo.png",
+      "src": "/numX/logo.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ]
 }
+
