@@ -18,8 +18,8 @@ const swapBtn = document.getElementById("swapBtn");
 const toBase = document.getElementById("toBase");
 
 // ===== Donate Popup Trigger Logic =====
-let conversionCount = 0;
-let donateTriggerAt = Math.floor(Math.random() * 4) + 2; 
+// let conversionCount = 0;
+// let donateTriggerAt = Math.floor(Math.random() * 4) + 2; 
 // random number between 2 and 5
 
 /* ==========================
@@ -351,9 +351,6 @@ const donateClose = document.getElementById("donateClose");
 const donateBtn = document.getElementById("donateBtn");
 
 // Show popup (example: after first result)
-function showDonatePopup() {
-  donateOverlay.classList.add("show");
-}
 
 function getDonateMessage(count) {
   if (count <= 2) {
@@ -377,14 +374,7 @@ donateBtn.addEventListener("click", () => {
 });
 
 
-//popup trigger 
-function maybeShowDonatePopup() {
-  conversionCount++;
 
-  if (conversionCount === donateTriggerAt) {
-    showDonatePopup();
-  }
-}
 
 //remind me later
 let donateDeferred = false;
