@@ -27,7 +27,6 @@ body {
   background: var(--bg);
   color: var(--text);
   transition: background 0.4s, color 0.4s;
-  overflow: hidden;
 }
 
 .container {
@@ -1384,3 +1383,4 @@ body:not(.dark) select option {
   color: rgb(12, 199, 237);
 
 }
+
