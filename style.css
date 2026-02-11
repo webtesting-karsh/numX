@@ -351,7 +351,7 @@ select, input {
 
 /* FOOTER */
 footer {
-  margin-top: 40px;
+  margin-top: auto;
   text-align: center;
   color: var(--muted);
 }
@@ -1382,4 +1382,5 @@ body:not(.dark) select option {
   font-family: "Allura", cursive;
   font-size: 1.5rem;
   color: rgb(12, 199, 237);
+
 }
