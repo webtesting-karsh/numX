@@ -1,21 +1,20 @@
-const CACHE_NAME = "numx-offline-v1";
+const CACHE_NAME = "numx-offline-v2";
 
 const ASSETS_TO_CACHE = [
-  "./",
-  "./index.html",
-  "./style.css",
-  "./script.js",
-  "./logo.png",
-  "./converter.html",
-  "./converter.js",
-  "./donate.js",
-  "./numX.png",
-  "./operations.html",
-  "./operations.js",
-  "./assets/karsh.png"
+  "/",
+  "/index.html",
+  "/converter.html",
+  "/operations.html",
+  "/style.css",
+  "/script.js",
+  "/converter.js",
+  "/operations.js",
+  "/donate.js",
+  "/logo.png",
+  "/manifest.json"
 ];
 
-/* Install */
+/* INSTALL */
 self.addEventListener("install", event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
@@ -25,13 +24,15 @@ self.addEventListener("install", event => {
   self.skipWaiting();
 });
 
-/* Activate */
+/* ACTIVATE */
 self.addEventListener("activate", event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(
         keys.map(key => {
-          if (key !== CACHE_NAME) return caches.delete(key);
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
         })
       )
     )
@@ -39,8 +40,20 @@ self.addEventListener("activate", event => {
   self.clients.claim();
 });
 
-/* Fetch */
+/* FETCH */
 self.addEventListener("fetch", event => {
+
+  /* Handle navigation requests (important for offline) */
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request).catch(() =>
+        caches.match("/index.html")
+      )
+    );
+    return;
+  }
+
+  /* Cache-first for other requests */
   event.respondWith(
     caches.match(event.request).then(response => {
       return response || fetch(event.request);
