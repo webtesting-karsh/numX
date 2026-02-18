@@ -655,7 +655,6 @@ body.dark .logo img {
 }
 
 /* .how-box {
-  display: none;
   margin-top: 14px;
   padding: 16px;
   border-radius: 14px;
@@ -676,7 +675,7 @@ body.dark .logo img {
 }
 
 .how-box.open {
-  max-height: 800px;
+  max-height: 2000px;
   padding: 16px;
   opacity: 1;
   overflow-y: auto;
@@ -737,11 +736,6 @@ body.dark .how-box {
 
 
 
-.step-row {
-  opacity: 0;
-  transform: translateY(6px);
-  transition: all 0.35s ease;
-}
 
 .step-row.active {
   opacity: 1;
@@ -853,25 +847,7 @@ body.dark .app-name {
 
 
 
-.step-row {
-  opacity: 0;
-  animation: slideIn 0.4s ease forwards;
-}
 
-.step-row:nth-child(n) {
-  animation-delay: 0.05s;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(-6px);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
 .step-row b {
   color: #9ef;
 }
@@ -880,6 +856,13 @@ body.dark .app-name {
   font-size: 0.7em;
 }
 
+
+.step-row.active {
+  opacity: 1;
+  transform: translateY(0);
+  background: rgba(99,102,241,0.18);
+  box-shadow: 0 0 18px rgba(99,102,241,0.45);
+}
 
 /*scientific toggle*/
 /* .sci-toggle {
@@ -924,7 +907,7 @@ body.dark .app-name {
 }
 
 .collapse.open .collapse-body {
-  max-height: 500px;
+  max-height: none;
   opacity: 1;
 }
 
@@ -937,9 +920,7 @@ body.dark .app-name {
   opacity: 0.8;
 }
 
-.step-row {
-  animation: fadeUp 0.3s ease both;
-}
+
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(4px); }
@@ -1399,4 +1380,15 @@ body:not(.dark) select option {
   font-family: "Allura", cursive;
   font-size: 1.5rem;
   color: rgb(12, 199, 237);
+}
+
+/*dropdown select*/
+select {
+  background-color: var(--card);
+  color: var(--text);
+}
+
+select option {
+  background-color: #0f172a;
+  color: #fff;
 }

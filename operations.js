@@ -2,20 +2,27 @@ function goHome() {
   window.location.href = "index.html";
 }
 /* ============================
-   BINARY ARITHMETIC — FULL ENGINE
+   NUMX — BINARY ARITHMETIC ENGINE
+   Fully Stable Version
 ============================ */
 
 let selectedOperator = "+";
 let lastOperation = null;
 
-let resultSection, resultBox, seeHowBtn, howBox;
-
 /* ============================
-   DOM READY
+   SAFE DOM READY
 ============================ */
 document.addEventListener("DOMContentLoaded", () => {
-  const opButtons = document.querySelectorAll(".op-btn");
 
+  const opButtons = document.querySelectorAll(".op-btn");
+  const resultSection = document.getElementById("resultSection");
+  const resultBox = document.getElementById("resultBox");
+  const seeHowBtn = document.getElementById("seeHowBtn");
+  const howBox = document.getElementById("howBox");
+
+  resultSection.style.display = "none";
+
+  /* Operator selection */
   opButtons.forEach(btn => {
     btn.addEventListener("click", () => {
       opButtons.forEach(b => b.classList.remove("active"));
@@ -24,110 +31,113 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  resultSection = document.getElementById("resultSection");
-  resultBox = document.getElementById("resultBox");
-  seeHowBtn = document.getElementById("seeHowBtn");
-  howBox = document.getElementById("howBox");
-
-  resultSection.style.display = "none";
-  howBox.style.display = "none";
-
+  /* See How Toggle */
   seeHowBtn.addEventListener("click", () => {
+
     if (!lastOperation) return;
 
-    const open = howBox.style.display === "block";
-    if (open) {
-      howBox.style.display = "none";
+    const isOpen = howBox.classList.contains("open");
+
+    if (isOpen) {
+      howBox.classList.remove("open");
       seeHowBtn.classList.remove("open");
-    } else {
-      howBox.innerHTML = buildBinaryExplanation(lastOperation);
-      howBox.style.display = "block";
-      seeHowBtn.classList.add("open");
-      animateSteps();
+      return;
     }
+
+    howBox.innerHTML = buildExplanation(lastOperation);
+    howBox.classList.add("open");
+    seeHowBtn.classList.add("open");
+
+    animateSteps(howBox);
   });
+
+  /* Attach calculate globally */
+  window.calculateOperation = function () {
+
+    const a = document.getElementById("num1").value.trim();
+    const b = document.getElementById("num2").value.trim();
+
+    if (!/^[01]+$/.test(a) || !/^[01]+$/.test(b)) {
+      showError("Only binary numbers (0 and 1) are allowed");
+      return;
+    }
+
+    let result, remainder = null;
+
+    switch (selectedOperator) {
+      case "+": result = binaryAdd(a, b); break;
+      case "-": result = binarySubtract(a, b); break;
+      case "*": result = binaryMultiply(a, b); break;
+      case "/":
+        const div = binaryDivide(a, b);
+        result = div.quotient;
+        remainder = div.remainder;
+        break;
+    }
+
+    lastOperation = { a, b, operator: selectedOperator, result, remainder };
+
+    resultBox.innerHTML = formatResult(result, remainder);
+    resultSection.style.display = "block";
+    howBox.innerHTML = "";
+howBox.classList.remove("open");
+seeHowBtn.classList.remove("open");
+    resultSection.classList.add("glow");
+
+    howBox.classList.remove("open");
+    seeHowBtn.classList.remove("open");
+
+    resultSection.scrollIntoView({ behavior: "smooth" });
+
+    /* Safe donate trigger */
+    if (typeof registerUserAction === "function") {
+      registerUserAction();
+    }
+  };
+
+  function showError(msg) {
+    resultBox.innerHTML = `<span class="error">${msg}</span>`;
+    resultSection.style.display = "block";
+  }
+
+  function formatResult(res, rem) {
+    if (rem !== null) {
+      return `<div class="value">${res}</div>
+              <div class="remainder">Remainder = ${rem}</div>`;
+    }
+    return `<div class="value">${res}</div>`;
+  }
+
 });
 
 /* ============================
-   MAIN CALCULATION
+   EXPLANATION DISPATCH
 ============================ */
-function calculateOperation() {
-  const a = document.getElementById("num1").value.trim();
-  const b = document.getElementById("num2").value.trim();
+function buildExplanation({ a, b, operator, result, remainder }) {
 
-  if (!/^[01]+$/.test(a) || !/^[01]+$/.test(b)) {
-    showError("Only binary numbers (0 and 1) are allowed");
-    return;
-  }
-
-  let result, remainder = null;
-
-  switch (selectedOperator) {
-    case "+":
-      result = binaryAdd(a, b);
-      break;
-    case "-":
-      result = binarySubtract(a, b);
-      break;
-    case "*":
-      result = binaryMultiply(a, b);
-      break;
-    case "/":
-      ({ quotient: result, remainder } = binaryDivide(a, b));
-      break;
-  }
-
-  lastOperation = { a, b, operator: selectedOperator, result, remainder };
-  resultBox.innerHTML = formatResult(result, remainder);
-  resultSection.style.display = "block";
-
-  howBox.style.display = "none";
-  seeHowBtn.classList.remove("open");
-
-  resultSection.scrollIntoView({ behavior: "smooth" });
-  registerUserAction();
-}
-
-/* ============================
-   RESULT FORMAT
-============================ */
-function formatResult(res, rem) {
-  if (rem !== null) {
-    return `<div class="value">${res}</div><div class="remainder">Remainder = ${rem}</div>`;
-  }
-  return `<div class="value">${res}</div>`;
-}
-
-function showError(msg) {
-  resultBox.innerHTML = `<span class="error">${msg}</span>`;
-  resultSection.style.display = "block";
-}
-
-/* ============================
-   SEE HOW DISPATCHER
-============================ */
-function buildBinaryExplanation({ a, b, operator, result, remainder }) {
   let html = "";
 
   if (operator === "+") {
     html += `<div class="step-title">Binary Addition</div>`;
-    html += explainBinaryAddition(a, b);
-  }
-  else if (operator === "-") {
-    html += `<div class="step-title">Binary Subtraction</div>`;
-    html += explainBinarySubtraction(a, b);
-  }
-  else if (operator === "*") {
-    html += `<div class="step-title">Binary Multiplication</div>`;
-    html += explainBinaryMultiplication(a, b);
-  }
-  else if (operator === "/") {
-    html += `<div class="step-title">Binary Long Division</div>`;
-    html += explainBinaryDivision(a, b);
+    html += explainAddition(a, b);
   }
 
-  html += `<div class="step-title">Final Result</div>`;
-  html += `<div class="final-result glow">${result}</div>`;
+  if (operator === "-") {
+    html += `<div class="step-title">Binary Subtraction</div>`;
+    html += explainSubtraction(a, b);
+  }
+
+  if (operator === "*") {
+    html += `<div class="step-title">Binary Multiplication</div>`;
+    html += explainMultiplication(a, b);
+  }
+
+  if (operator === "/") {
+    html += `<div class="step-title">Binary Long Division</div>`;
+    html += explainDivision(a, b);
+  }
+
+  html += `<div class="final-result">${result}</div>`;
 
   if (remainder !== null) {
     html += `<div class="step-row">Remainder = <b>${remainder}</b></div>`;
@@ -137,9 +147,10 @@ function buildBinaryExplanation({ a, b, operator, result, remainder }) {
 }
 
 /* ============================
-   ADDITION (CARRY PER BIT)
+   ADDITION
 ============================ */
-function explainBinaryAddition(a, b) {
+function explainAddition(a, b) {
+
   a = a.padStart(Math.max(a.length, b.length), "0");
   b = b.padStart(a.length, "0");
 
@@ -147,14 +158,19 @@ function explainBinaryAddition(a, b) {
   let steps = "";
 
   for (let i = a.length - 1; i >= 0; i--) {
+
     const sum = Number(a[i]) + Number(b[i]) + carry;
+    const bit = sum % 2;
+    const newCarry = Math.floor(sum / 2);
+
     steps += `
       <div class="step-row">
-        ${a[i]} + ${b[i]} + carry(${carry}) = ${sum.toString(2)}
-        → write ${sum % 2}, carry ${Math.floor(sum / 2)}
+        ${a[i]} + ${b[i]} + carry(${carry}) = ${sum}
+        → write ${bit}, carry ${newCarry}
       </div>
     `;
-    carry = Math.floor(sum / 2);
+
+    carry = newCarry;
   }
 
   if (carry) {
@@ -165,9 +181,10 @@ function explainBinaryAddition(a, b) {
 }
 
 /* ============================
-   SUBTRACTION (BORROW PER BIT)
+   SUBTRACTION
 ============================ */
-function explainBinarySubtraction(a, b) {
+function explainSubtraction(a, b) {
+
   a = a.padStart(Math.max(a.length, b.length), "0");
   b = b.padStart(a.length, "0");
 
@@ -175,6 +192,7 @@ function explainBinarySubtraction(a, b) {
   let steps = "";
 
   for (let i = a.length - 1; i >= 0; i--) {
+
     let d1 = Number(a[i]) - borrow;
     let d2 = Number(b[i]);
 
@@ -192,39 +210,43 @@ function explainBinarySubtraction(a, b) {
 }
 
 /* ============================
-   MULTIPLICATION (PARTIAL PRODUCTS)
+   MULTIPLICATION
 ============================ */
-function explainBinaryMultiplication(a, b) {
+function explainMultiplication(a, b) {
+
   let steps = "";
 
   for (let i = b.length - 1; i >= 0; i--) {
-    const bit = b[i];
-    if (bit === "1") {
-      steps += `<div class="step-row">${a} shifted ${b.length - 1 - i} → ${a + "0".repeat(b.length - 1 - i)}</div>`;
+
+    if (b[i] === "1") {
+      steps += `<div class="step-row">${a} shifted ${b.length - 1 - i}</div>`;
     } else {
-      steps += `<div class="step-row">${a} × 0 → 0</div>`;
+      steps += `<div class="step-row">Multiply by 0 → 0</div>`;
     }
   }
 
-  steps += `<div class="step-row">Add all partial products</div>`;
+  steps += `<div class="step-row">Add partial products</div>`;
+
   return steps;
 }
 
 /* ============================
-   BINARY LONG DIVISION (FULL)
+   LONG DIVISION
 ============================ */
-function explainBinaryDivision(dividend, divisor) {
+function explainDivision(dividend, divisor) {
+
   let steps = "";
   let temp = "";
   let quotient = "";
 
   for (let i = 0; i < dividend.length; i++) {
+
     temp += dividend[i];
     steps += `<div class="step-row">Bring down → ${temp}</div>`;
 
     if (parseInt(temp, 2) >= parseInt(divisor, 2)) {
       const diff = binarySubtract(temp, divisor);
-      steps += `<div class="step-row">${temp} ≥ ${divisor} → subtract → ${diff}</div>`;
+      steps += `<div class="step-row">${temp} - ${divisor} = ${diff}</div>`;
       temp = diff;
       quotient += "1";
     } else {
@@ -240,63 +262,95 @@ function explainBinaryDivision(dividend, divisor) {
 }
 
 /* ============================
-   CORE BINARY OPS
+   CORE BINARY OPERATIONS
 ============================ */
 function binaryAdd(a, b) {
-  let carry = 0, res = "";
+
+  let carry = 0;
+  let result = "";
+
   a = a.padStart(Math.max(a.length, b.length), "0");
   b = b.padStart(a.length, "0");
 
   for (let i = a.length - 1; i >= 0; i--) {
+
     const sum = Number(a[i]) + Number(b[i]) + carry;
-    res = (sum % 2) + res;
+    result = (sum % 2) + result;
     carry = Math.floor(sum / 2);
   }
-  if (carry) res = "1" + res;
-  return res;
+
+  if (carry) result = "1" + result;
+
+  return result;
 }
 
 function binarySubtract(a, b) {
-  let res = "";
+
+  let result = "";
   let borrow = 0;
+
   a = a.padStart(Math.max(a.length, b.length), "0");
   b = b.padStart(a.length, "0");
 
   for (let i = a.length - 1; i >= 0; i--) {
+
     let d1 = Number(a[i]) - borrow;
     let d2 = Number(b[i]);
+
     if (d1 < d2) {
       d1 += 2;
       borrow = 1;
     } else {
       borrow = 0;
     }
-    res = (d1 - d2) + res;
+
+    result = (d1 - d2) + result;
   }
-  return res.replace(/^0+/, "") || "0";
+
+  return result.replace(/^0+/, "") || "0";
 }
 
 function binaryMultiply(a, b) {
-  let res = "0";
+
+  let result = "0";
+
   for (let i = b.length - 1; i >= 0; i--) {
     if (b[i] === "1") {
-      res = binaryAdd(res, a + "0".repeat(b.length - 1 - i));
+      result = binaryAdd(result, a + "0".repeat(b.length - 1 - i));
     }
   }
-  return res;
+
+  return result;
 }
 
 function binaryDivide(a, b) {
-  const q = Math.floor(parseInt(a, 2) / parseInt(b, 2));
-  const r = parseInt(a, 2) % parseInt(b, 2);
-  return { quotient: q.toString(2), remainder: r.toString(2) };
+
+  if (b === "0") {
+    return { quotient: "Error", remainder: "Error" };
+  }
+
+  const dividend = parseInt(a, 2);
+  const divisor = parseInt(b, 2);
+
+  const q = Math.floor(dividend / divisor);
+  const r = dividend % divisor;
+
+  return {
+    quotient: q.toString(2),
+    remainder: r.toString(2)
+  };
 }
 
 /* ============================
-   ANIMATION
+   STEP ANIMATION
 ============================ */
-function animateSteps() {
-  howBox.querySelectorAll(".step-row").forEach((row, i) => {
-    setTimeout(() => row.classList.add("active"), i * 120);
+function animateSteps(container) {
+
+  const rows = container.querySelectorAll(".step-row");
+
+  rows.forEach((row, i) => {
+    setTimeout(() => {
+      row.classList.add("active");
+    }, i * 120);
   });
 }

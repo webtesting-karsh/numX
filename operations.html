@@ -70,7 +70,6 @@
 
       <div class="how-box" id="howBox"></div>
     </div>
-
   </div>
   <!--donation popup-->
  <div class="donate-overlay" id="donateOverlay">
@@ -84,7 +83,6 @@
     <p>
       Your contribution helps us keep this app running,
       improving features, and staying ad-free.
-      This service is served by 'karsh Securities'
     </p>
 
     <button class="donate-btn" id="donateBtn">
@@ -94,7 +92,15 @@
   </div>
 </div>
 
+<script src="donate.js"></script>
   <script src="operations.js"></script>
-  <script src="donate.js"></script>
+  <script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js")
+    .then(() => console.log("SW registered"))
+    .catch(err => console.log("SW error", err));
+}
+</script>
+
 </body>
 </html>

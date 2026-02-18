@@ -7,6 +7,10 @@ function goHome() {
 const DIGITS = "0123456789ABCDEF";
 const DEFAULT_PRECISION = 7;
 
+let conversionCount = 0;
+let donateThreshold = Math.floor(Math.random() * 4) + 2;
+
+
 /* ==========================
    DOM
 ========================== */
@@ -173,8 +177,22 @@ function convert() {
   resultSection.style.display = "block";
   resultSection.classList.add("glow");
   resultSection.scrollIntoView({ behavior: "smooth" });
+  if (typeof registerUserAction === "function") {
+  registerUserAction();
 }
 
+conversionCount++;
+
+if (conversionCount === donateThreshold) {
+// if (typeof showDonatePopup === "function") {
+showDonatePopup();
+}
+}
+// }
+
+//donate trigger temp
+
+//
 //copy result
 function copyResult() {
   const text = resultBox.innerText.trim();
@@ -223,26 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("seeHowBtn");
   const box = document.getElementById("howBox");
 
-  //see how temp 
-//  if (!btn || !box) return;
 
-//   btn.addEventListener("click", function () {
-
-//     const isOpen = box.classList.contains("open");
-
-//     if (isOpen) {
-//       box.classList.remove("open");
-//       btn.classList.remove("open");
-//       return;
-//     }
-
-//     if (toBase.value === "all") {
-//       box.innerHTML = "See How is available only for single conversions.";
-//       box.classList.add("open");
-//       btn.classList.add("open");
-//       return;
-//     }
-  //
 
   function stepHeader(step, text) {
     return `<div class="step-header">Step: ${step}<div class="step-desc">${text}</div></div>`;
@@ -413,18 +412,17 @@ function closeSeeHow() {
 //donate us logic
 const donateOverlay = document.getElementById("donateOverlay");
 const donateClose = document.getElementById("donateClose");
-const donateBtn = document.getElementById("donateBtn");
 
 // Show popup (example: after first result)
 
 function getDonateMessage(count) {
   if (count <= 2) {
-    return "Enjoying NumX? Your support helps us keep it free ❤️. This service is served by 'karsh Securities' ";
+    return "Enjoying NumX? Your contribution helps us keep this app running, improving features, and staying ad-free.❤️.";
   }
   if (count <= 4) {
-    return "You’ve used NumX a few times 😊 Consider supporting the project! This service is served by 'karsh Securities' ";
+    return "You’ve used NumX a few times 😊 Consider supporting the project! Your contribution helps us keep this app running, improving features, and staying ad-free.❤️.";
   }
-  return "Power user detected 🚀 Your contribution keeps NumX improving. This service is served by 'karsh Securities'";
+  return "Power user detected 🚀 Your contribution helps us keep this app running, improving features, and staying ad-free.❤️.";
 }
 
 // Close popup
@@ -432,11 +430,6 @@ donateClose.addEventListener("click", () => {
   donateOverlay.classList.remove("show");
 });
 
-// Donate button action
-donateBtn.addEventListener("click", () => {
-  // Replace with your real donation link later
-  window.open("upi://pay?pa=khrgoshh@oksbi&pn=khrgosh&aid=uGICAgKDSy5zHRg", "_blank");
-});
 
 
 

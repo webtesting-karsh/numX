@@ -1,28 +1,35 @@
-const CACHE_NAME = "numx-offline-v2.11";
+const CACHE_NAME = "numx-offline-v2.12";
 
 const ASSETS_TO_CACHE = [
-  "/",
-  "/index.html",
-  "/converter.html",
-  "/operations.html",
-  "/style.css",
-  "/script.js",
-  "/converter.js",
-  "/operations.js",
-  "/donate.js",
-  "/logo.png",
-  "/manifest.json"
+  "./",
+  "./index.html",
+  "./converter.html",
+  "./operations.html",
+  "./style.css",
+  "./converter.js",
+  "./operations.js",
+  "./donate.js",
+  "./logo.png",
+  "./manifest.json"
 ];
+
 
 /* INSTALL */
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(ASSETS_TO_CACHE);
+    caches.open(CACHE_NAME).then(async cache => {
+      for (let asset of ASSETS_TO_CACHE) {
+        try {
+          await cache.add(asset);
+        } catch (err) {
+          console.warn("Failed to cache:", asset);
+        }
+      }
     })
   );
   self.skipWaiting();
 });
+
 
 /* ACTIVATE */
 self.addEventListener("activate", event => {
