@@ -654,7 +654,7 @@ body.dark .logo img {
   transform: rotate(180deg);
 }
 
-.how-box {
+/* .how-box {
   display: none;
   margin-top: 14px;
   padding: 16px;
@@ -662,6 +662,24 @@ body.dark .logo img {
   background: rgba(99,102,241,0.08);
   line-height: 1.9;
   animation: howFade 0.4s ease;
+} */
+.how-box {
+  max-height: 0;
+  overflow: hidden;
+  margin-top: 14px;
+  padding: 0 16px;
+  border-radius: 14px;
+  background: rgba(99,102,241,0.08);
+  line-height: 1.9;
+  transition: max-height 0.35s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+
+.how-box.open {
+  max-height: 800px;
+  padding: 16px;
+  opacity: 1;
+  overflow-y: auto;
 }
 
 @keyframes howFade {

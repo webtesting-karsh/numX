@@ -16,6 +16,8 @@ const themeToggle = document.getElementById("themeToggle");
 const copyBtn = document.getElementById("copyBtn");
 const swapBtn = document.getElementById("swapBtn");
 const toBase = document.getElementById("toBase");
+const numberInput = document.getElementById("numberInput");
+const fromBase = document.getElementById("fromBase");
 
 // ===== Donate Popup Trigger Logic =====
 // let conversionCount = 0;
@@ -26,10 +28,14 @@ const toBase = document.getElementById("toBase");
    THEME
 ========================== */
 document.body.classList.add("dark");
-themeToggle.checked = true;
-themeToggle.addEventListener("change", () => {
-  document.body.classList.toggle("dark");
-});
+
+if (themeToggle) {
+  themeToggle.checked = true;
+  themeToggle.addEventListener("change", () => {
+    document.body.classList.toggle("dark");
+  });
+}
+
 
 /* ==========================
    TOAST
@@ -167,23 +173,76 @@ function convert() {
   resultSection.style.display = "block";
   resultSection.classList.add("glow");
   resultSection.scrollIntoView({ behavior: "smooth" });
-  registerUserAction();
 }
 
-/* ==========================
-   COPY
-========================== */
+//copy result
 function copyResult() {
-  navigator.clipboard.writeText(resultBox.innerText.trim());
-  showToast("Result copied!");
+  const text = resultBox.innerText.trim();
+
+  if (!text) return;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        copyBtn.classList.add("copied");
+        showToast("Result copied!");
+        setTimeout(() => copyBtn.classList.remove("copied"), 1200);
+      })
+      .catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
 }
 
+function fallbackCopy(text) {
+  const textarea = document.createElement("textarea");
+  textarea.value = text;
+  textarea.style.position = "fixed";
+  textarea.style.opacity = "0";
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  try {
+    document.execCommand("copy");
+    copyBtn.classList.add("copied");
+    showToast("Result copied!");
+    setTimeout(() => copyBtn.classList.remove("copied"), 1200);
+  } catch (err) {
+    showToast("Copy failed");
+  }
+
+  document.body.removeChild(textarea);
+}
+
+//copy result function end 
 /* ==========================
    SEE HOW (FIXED)
 ========================== */
 document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("seeHowBtn");
   const box = document.getElementById("howBox");
+
+  //see how temp 
+//  if (!btn || !box) return;
+
+//   btn.addEventListener("click", function () {
+
+//     const isOpen = box.classList.contains("open");
+
+//     if (isOpen) {
+//       box.classList.remove("open");
+//       btn.classList.remove("open");
+//       return;
+//     }
+
+//     if (toBase.value === "all") {
+//       box.innerHTML = "See How is available only for single conversions.";
+//       box.classList.add("open");
+//       btn.classList.add("open");
+//       return;
+//     }
+  //
 
   function stepHeader(step, text) {
     return `<div class="step-header">Step: ${step}<div class="step-desc">${text}</div></div>`;
@@ -199,17 +258,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btn.addEventListener("click", () => {
     //see how toggle logic fixed
-     const isOpen = box.style.display === "block";
-  if (isOpen) {
-    box.style.display = "none";
-    btn.classList.remove("open");
-    return;
-  }
-    if (toBase.value === "all") {
-      box.innerHTML = "See How is available only for single conversions.";
-      box.style.display = "block";
-      return;
-    }
+  const isOpen = box.classList.contains("open");
+
+if (isOpen) {
+  box.classList.remove("open");
+  btn.classList.remove("open");
+  return;
+}
+
+   if (toBase.value === "all") {
+  box.innerHTML = "See How is available only for single conversions.";
+  box.classList.add("open");
+  btn.classList.add("open");
+  return;
+}
+
 
     const num = numberInput.value.trim();
     if (!num) return;
@@ -321,9 +384,9 @@ fracSteps += `
       </div>
     `;
 
-    box.innerHTML = html;
-    box.style.display = "block";
-    btn.classList.add("open");
+   box.innerHTML = html;
+box.classList.add("open");
+btn.classList.add("open");
   });
 
   /* COLLAPSE TOGGLE */
@@ -341,9 +404,11 @@ function closeSeeHow() {
   const box = document.getElementById("howBox");
   const btn = document.getElementById("seeHowBtn");
   if (!box) return;
-  box.style.display = "none";
+
+  box.classList.remove("open");
   btn.classList.remove("open");
 }
+
 
 //donate us logic
 const donateOverlay = document.getElementById("donateOverlay");
@@ -393,3 +458,4 @@ document.getElementById("donateClose").addEventListener("click", () => {
   donateOverlay.classList.remove("show");
   donateDeferred = true;
 });
+

@@ -29,6 +29,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+const donateBtn = document.getElementById("donateBtn");
+
+if (donateBtn) {
+  donateBtn.addEventListener("click", () => {
+    window.location.href = "upi://pay?pa=khrgoshh@oksbi&pn=khrgosh&aid=uGICAgKDSy5zHRg";
+  });
+}
 
 /* -------------------------------
    PUBLIC API
