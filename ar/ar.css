@@ -1,0 +1,296 @@
+body {
+  margin: 0;
+  background: #0f172a;
+  color: #e5e7eb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: #111827;
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+
+.inline-card {
+  display: flex;
+  gap: 15px;
+}
+
+.half {
+  flex: 1;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  background: #1f2937;
+  border: none;
+  border-radius: 8px;
+  color: white;
+}
+
+.operator-row {
+  display: flex;
+  gap: 12px;
+}
+
+.op-btn {
+  flex: 1;
+  padding: 12px;
+  background: #1f2937;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.op-btn.active {
+  background: #6366f1;
+}
+
+.mode-row {
+  display: flex;
+  gap: 10px;
+}
+
+.mode-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #1f2937;
+  cursor: pointer;
+  color: #e5e7eb;
+}
+
+.mode-btn.active {
+  background: #6366f1;
+}
+
+.alert {
+  color: #ef4444;
+  margin-top: 8px;
+  font-size: 14px;
+}
+
+.primary-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  background: linear-gradient(90deg,#6366f1,#8b5cf6);
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.result-card {
+  display: none;
+  margin-top: 25px;
+  padding: 20px;
+  background: #111827;
+  border-radius: 16px;
+}
+
+
+
+
+
+
+.line {
+  border-bottom: 2px solid #4b5563;
+  margin: 4px 0;
+}
+
+.borrow-highlight {
+  color: #f97316;
+}
+
+.overflow-bit {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.final-box {
+  margin-top: 20px;
+  padding: 16px;
+  text-align: center;
+  border-radius: 12px;
+  background: linear-gradient(90deg,#6366f1,#8b5cf6);
+  box-shadow: 0 0 20px rgba(139,92,246,0.6);
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.result-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.play-btn,
+.see-how-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #6366f1;
+  cursor: pointer;
+}
+
+.how-box {
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.how-box.open {
+  max-height: 3000px;
+  padding-top: 15px;
+}
+
+.step {
+  margin-bottom: 6px;
+}
+
+
+.vertical-grid {
+  display: grid;
+  margin-top: 20px;
+  font-family: monospace;
+  font-size: 26px;
+  justify-content: center;
+  row-gap: 6px;
+}
+
+.bit-cell {
+  text-align: center;
+}
+
+.carry-cell {
+  text-align: center;
+  font-size: 14px;
+  color: #a78bfa;
+}
+
+.math-line {
+  border-bottom: 2px solid #4b5563;
+  height: 10px;
+}
+
+.overflow-bit {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.overflow-note {
+  color: #ef4444;
+  margin-top: 12px;
+}
+
+
+
+
+
+/* ---------- INFO BUTTON ---------- */
+
+/* ---------- WARNING INFO BUTTON ---------- */
+
+.info-btn {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#f59e0b,#f97316);
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 16px rgba(245,158,11,0.7);
+  z-index: 1000;
+  transition: 0.25s ease;
+}
+
+.info-btn:hover {
+  transform: scale(1.1);
+}
+
+/* ---------- MODAL ---------- */
+
+.info-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s ease;
+  z-index: 999;
+}
+
+.info-modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.info-content {
+  background: #111827;
+  padding: 30px;
+  border-radius: 18px;
+  width: 92%;
+  max-width: 430px;
+  text-align: center;
+  border: 1px solid #f59e0b;
+  box-shadow: 0 0 50px rgba(245,158,11,0.4);
+  animation: popIn 0.25s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(0.92); opacity:0; }
+  to { transform: scale(1); opacity:1; }
+}
+
+.info-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #f59e0b;
+  margin-bottom: 14px;
+}
+
+.info-text {
+  font-size: 14px;
+  color: #cbd5e1;
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+
+.info-close {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(90deg,#f59e0b,#f97316);
+  color: #111;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.info-close:hover {
+  transform: scale(1.05);
+}

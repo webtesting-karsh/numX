@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NumX Arithmetic Lab</title>
+<link rel="stylesheet" href="ar.css">
+</head>
+
+<body>
+<!--info-->
+<!-- INFO BUTTON -->
+<div id="infoBtn" class="info-btn">i</div>
+
+<!-- INFO MODAL -->
+<div id="infoModal" class="info-modal">
+  <div class="info-content">
+    <div class="info-title">⚠ Development Notice</div>
+    <div class="info-text">
+      This is an unstable version.<br><br>
+      We're actively working on improvements, animations, and stability updates. <br><br>
+      Some features may behave unexpectedly.
+    </div>
+    <button id="closeInfo" class="info-close">Got it</button>
+  </div>
+</div>
+<!---->
+<div class="container">
+
+  <h2 class="title">Arithmetic Operations</h2>
+
+  <!-- MODE -->
+  <div class="card">
+    <label>Mode</label>
+    <div class="mode-row">
+      <button id="signedBtn" class="mode-btn active">Signed (2's Complement)</button>
+      <button id="unsignedBtn" class="mode-btn">Unsigned</button>
+    </div>
+    <div id="modeAlert" class="alert"></div>
+  </div>
+
+  <!-- BASE + WIDTH -->
+  <div class="card inline-card">
+    <div class="half">
+      <label>Input Base</label>
+      <select id="inputBase">
+        <option value="2">Binary</option>
+        <option value="8">Octal</option>
+        <option value="10" selected>Decimal</option>
+        <option value="16">Hexadecimal</option>
+      </select>
+    </div>
+
+    <div class="half">
+      <label>Bit Width</label>
+      <select id="bitWidth">
+        <option value="dynamic" selected>Dynamic</option>
+        <option value="8">8-bit</option>
+        <option value="16">16-bit</option>
+        <option value="32">32-bit</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- NUMBER 1 -->
+  <div class="card">
+    <label>Number 1</label>
+    <input id="num1" type="text">
+  </div>
+
+  <!-- OPERATOR -->
+  <div class="card">
+    <label>Operator</label>
+    <div class="operator-row">
+      <button class="op-btn active" data-op="+">+</button>
+      <button class="op-btn" data-op="-">−</button>
+      <button class="op-btn" data-op="*">×</button>
+    </div>
+  </div>
+
+  <!-- NUMBER 2 -->
+  <div class="card">
+    <label>Number 2</label>
+    <input id="num2" type="text">
+  </div>
+
+  <button id="calculateBtn" class="primary-btn">Calculate</button>
+
+  <!-- RESULT -->
+  <div id="resultSection" class="result-card">
+    <div id="resultBox"></div>
+
+    <div class="result-actions">
+      <button id="playBtn" class="play-btn">▶ Playback</button>
+      <button id="seeHowBtn" class="see-how-btn">See How ▾</button>
+    </div>
+
+    <div id="howBox" class="how-box"></div>
+  </div>
+
+</div>
+
+<script src="ar.js"></script>
+</body>
+</html>
