@@ -1142,7 +1142,7 @@ body.dark .app-name {
 }
 
 .home-actions {
-  margin-top: 20px;
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
   gap: 30px;
@@ -1418,4 +1418,28 @@ select option {
   padding: 6px 0;
   box-shadow: 0 0 10px rgba(245,158,11,0.6);
   letter-spacing: 1px;
+}
+
+/*update toast*/
+/* ---------- UPDATE TOAST ---------- */
+
+.update-toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: linear-gradient(90deg,#6366f1,#8b5cf6);
+  padding: 12px 20px;
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+  box-shadow: 0 0 20px rgba(139,92,246,0.6);
+  opacity: 0;
+  transition: 0.3s ease;
+  z-index: 2000;
+}
+
+.update-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }

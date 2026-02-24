@@ -77,14 +77,41 @@
     <button class="remind-btn" id="donateClose">Remind me later</button>
   </div>
 </div>
+
+<div id="updateToast" class="update-toast">
+  Updating to latest version...
+</div>
+
 <script src="donate.js"></script>
 <script>
 if ("serviceWorker" in navigator) {
+
   navigator.serviceWorker.register("/service-worker.js")
     .then(reg => {
-      reg.update(); // force update check
+
+      reg.onupdatefound = () => {
+
+        const newWorker = reg.installing;
+
+        newWorker.onstatechange = () => {
+
+          if (newWorker.state === "installed" &&
+              navigator.serviceWorker.controller) {
+
+            const toast = document.getElementById("updateToast");
+            toast.classList.add("show");
+
+            setTimeout(() => {
+              window.location.reload();
+            }, 1200); // smooth delay
+          }
+        };
+      };
+
     });
+
 }
+
 </script>
 </body>
 </html>

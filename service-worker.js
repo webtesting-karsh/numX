@@ -1,35 +1,26 @@
-const CACHE_NAME = "numx-offline-v2.3";
+const CACHE_NAME = "numx-offline-v2.4.2";
 
 const ASSETS_TO_CACHE = [
-  "./",
-  "./index.html",
-  "./converter.html",
-  "./operations.html",
-  "./style.css",
-  "./converter.js",
-  "./operations.js",
-  "./donate.js",
-  "./logo.png",
-  "./manifest.json"
+  "/",
+  "/index.html",
+  "/converter.html",
+  "/style.css",
+  "/converter.js",
+  "/donate.js",
+  "/ar/ar.html",
+  "/ar/ar.css",
+  "/ar/ar.js",
+  "/logo.png",
+  "/manifest.json"
 ];
-
 
 /* INSTALL */
 self.addEventListener("install", event => {
+  self.skipWaiting(); // activate immediately
   event.waitUntil(
-    caches.open(CACHE_NAME).then(async cache => {
-      for (let asset of ASSETS_TO_CACHE) {
-        try {
-          await cache.add(asset);
-        } catch (err) {
-          console.warn("Failed to cache:", asset);
-        }
-      }
-    })
+    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS_TO_CACHE))
   );
-  self.skipWaiting();
 });
-
 
 /* ACTIVATE */
 self.addEventListener("activate", event => {
@@ -44,20 +35,31 @@ self.addEventListener("activate", event => {
       )
     )
   );
-  self.clients.claim();
+
+  return self.clients.claim(); // take control immediately
 });
 
-/* FETCH */
+/* FETCH (Network First) */
 self.addEventListener("fetch", event => {
+
+  if (event.request.method !== "GET") return;
+
+  const url = new URL(event.request.url);
+
+  // Only cache same-origin requests
+  if (url.origin !== location.origin) {
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        return response || fetch(event.request);
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, clone);
+        });
+        return response;
       })
-      .catch(() => {
-        if (event.request.mode === "navigate") {
-          return caches.match("/index.html");
-        }
-      })
+      .catch(() => caches.match(event.request))
   );
 });
