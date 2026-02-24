@@ -1,4 +1,4 @@
-const CACHE_NAME = "numx-offline-v2.12";
+const CACHE_NAME = "numx-offline-v2.3";
 
 const ASSETS_TO_CACHE = [
   "./",

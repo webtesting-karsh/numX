@@ -27,7 +27,8 @@
 
     <!-- Main Actions -->
     <div class="home-actions">
-      <a href="./ar/ar.html" class="home-card">
+      <a href="./ar/ar.html" class="home-card ribbon-card">
+        <div class="ribbon ribbon-card">NEW</div>
         <div class="home-card-icon">＋ − × ÷</div>
         <div class="home-card-title">Arithmetic Operations </div>
       </a>
@@ -80,8 +81,9 @@
 <script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/service-worker.js")
-    .then(() => console.log("SW registered"))
-    .catch(err => console.log("SW error", err));
+    .then(reg => {
+      reg.update(); // force update check
+    });
 }
 </script>
 </body>
